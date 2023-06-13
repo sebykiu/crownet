@@ -14,11 +14,11 @@
 #include <thread>
 
 Define_Module(UnityClient);
-std::mutex UnityClient::m_mutex;
-UnityClient *UnityClient::instance = nullptr;
+UnityClient* UnityClient::instance = nullptr;
+int UnityClient::serverSocket = -1;
 
-void UnityClient::initialize() {
-    UnityClient *unityClient = UnityClient::getInstance();
+void UnityClient::initialize(int stage) {
+    if(stage == inet::INITSTAGE_LOCAL) {
     std::regex regex("^[[:alpha:]]+$");
     //char * HOST = "192.168.178.174";
     const char *HOST = par("hostAddress").stringValue();
@@ -28,7 +28,7 @@ void UnityClient::initialize() {
     int connection_status;
 
     // create default IPv4 TCP socket
-    unityClient->serverSocket = socket(AF_INET, SOCK_STREAM, 0);
+    UnityClient::serverSocket = socket(AF_INET, SOCK_STREAM, 0);
     printf("Successfully created server socket");
     // set up address and port. Accepts IpV4 connections from any address
     struct sockaddr_in server_address;
@@ -48,25 +48,24 @@ void UnityClient::initialize() {
     else {
         server_address.sin_addr.s_addr = inet_addr(HOST);
     }
-    printf("Successfully obtained address to connect");
+    printf("Successfully obtained address to connect \n");
 
     // connect to server
-    connection_status = connect(unityClient->serverSocket,
+    connection_status = connect( UnityClient::serverSocket,
             (struct sockaddr*) &server_address, sizeof(server_address));
 
     if (connection_status == 0) {
-        printf("Successfully connected to the server!");
+        printf("Successfully connected to the server! \n");
 
     }
 
     cSimpleModule::initialize();
-
+    }
 }
 
 void UnityClient::finish() {
-    UnityClient *unityClient = UnityClient::getInstance();
     std::cout << "Closed socket connection";
-    close(unityClient->serverSocket);
+    close( UnityClient::serverSocket);
     cSimpleModule::finish();
 }
 
@@ -77,7 +76,7 @@ struct Message {
 
 void UnityClient::sendMessage(const std::string &id, const std::string &path,
         const std::string &instruction, inet::Coord coord) {
-    UnityClient *unityClient = UnityClient::getInstance();
+//UnityClient *unityClient = UnityClient::getInstance();
 
     nlohmann::json data;
     data["Id"] = id;
@@ -94,9 +93,9 @@ void UnityClient::sendMessage(const std::string &id, const std::string &path,
     uint32_t length = strlen(dataToSend);
     uint32_t lengthNet = htonl(length);
 
-    std::unique_lock<std::mutex> lock(unityClient->m_mutex);
-    ::send(unityClient->serverSocket, (void*) &lengthNet, sizeof(lengthNet), 0);
-    ::send(unityClient->serverSocket, dataToSend, length, 0);
+    //std::unique_lock<std::mutex> lock(m_mutex);
+    ::send( UnityClient::serverSocket, (void*) &lengthNet, sizeof(lengthNet), 0);
+    ::send( UnityClient::serverSocket, dataToSend, length, 0);
 
 
 }

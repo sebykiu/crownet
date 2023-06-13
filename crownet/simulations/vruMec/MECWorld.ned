@@ -35,21 +35,19 @@ import simu5g.nodes.mec.MECHost;
 import inet.environment.common.PhysicalEnvironment;
 import simu5g.nodes.mec.MECOrchestrator.MecOrchestrator;
 import simu5g.nodes.mec.UALCMP.UALCMP;
+import crownet.unity.visualizer.net.UnityNetworkVisualizer;
 
 network MecWorld
 {
-    @display("bgb=1380.5399,1027.62");
+    @display("bgb=1913.536,1400.098");
 
     submodules:
-        
+
         coordConverter: <default("OsgCoordConverterVadere")> like ICoordConverter if typename != "" {
             @display("p=950.58203,144.34;i=block/table2;is=s");
         }
         visualization: <default(firstAvailableOrEmpty("IntegratedCanvasVisualizer"))> like IIntegratedVisualizer if typename != "" {
-            @display("p=1301.7375,23.925;is=s");
-        }
-        net_visualization: <default(firstAvailableOrEmpty("IntegratedCanvasVisualizer"))> like IIntegratedVisualizer if typename != "" {
-            @display("p=1301.7375,84.825;is=s");
+            @display("p=1682.592,216.51001;is=s");
         }
         traci: <default("Manager")> like TraCiManager if typename != "" {
             parameters:
@@ -93,9 +91,8 @@ network MecWorld
             @display("p=230.09,98.61");
         }
 
-       // mobilityVisualizer: MobilityVisualizer;
-       
-       
+
+
 
 
     connections:

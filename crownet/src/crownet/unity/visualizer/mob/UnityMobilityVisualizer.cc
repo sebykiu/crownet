@@ -7,11 +7,11 @@ Define_Module(UnityMobilityVisualizer);
 void UnityMobilityVisualizer::initialize(int stage) {
     MobilityVisualizerBase::initialize(stage);
 
-    // instantly remove to remove unsupported signal
-    MobilityVisualizerBase::visualizationSubjectModule->unsubscribe(PRE_MODEL_CHANGE, this);
+
 
     if (stage == inet::INITSTAGE_LOCAL) {
-
+        // instantly remove to remove unsupported signal
+        MobilityVisualizerBase::visualizationSubjectModule->unsubscribe(PRE_MODEL_CHANGE, this);
         // Get the UnityClient instance
        unityClient = UnityClient::getInstance();
     }

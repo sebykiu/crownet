@@ -7,7 +7,7 @@ package crownet.unity.visualizer.net;
 
 module UnityNetworkVisualizer extends LinkVisualizerBase like IPhysicalLinkVisualizer
 {
-    @class(crownet::UnityMobilityVisualizer);
+    @class(crownet::UnityNetworkVisualizer);
     submodules:
         unityClient: UnityClient;
 

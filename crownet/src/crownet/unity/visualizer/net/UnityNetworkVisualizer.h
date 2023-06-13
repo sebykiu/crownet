@@ -20,6 +20,9 @@ public:
     virtual void setAlpha(const LinkVisualization *linkVisualization, double alpha) const override;
 
     virtual void initialize(int stage) override;
+    virtual void subscribe() override;
+    virtual void unsubscribe() override;
+    virtual void receiveSignal(cComponent *source, simsignal_t signal, cObject *object, cObject *details) override;
 };
 
  // namespace visualizer
